@@ -58,14 +58,14 @@ python {script_path} \\
     --only_rfdiff \\
     {shared_block}
 """
-    logging.warning("Submitting arrays for RFdiffusion")
+    logging.info("Submitting arrays for RFdiffusion")
     rf_s_path = os.path.join(args.filtered_designs_folder,"rf_array.sh")
     write_sbatch(rf_s_path, rf_array)
     rf_job_id = submit_sbatch(rf_s_path, parsable=True)
-    logging.warning(f"RF array job submitted: {rf_job_id}")
+    logging.info(f"RF array job submitted: {rf_job_id}")
 
     # Build ProteinMPNN job, dependent on the previous RFDiffusion array
-    logging.warning(f"Constructing pmpnn command with flags and {shared_block}")
+    logging.info(f"Constructing pmpnn command with flags and {shared_block}")
     pmpnn = f"""#!/bin/bash
 #SBATCH --job-name=pmpnn
 #SBATCH --dependency=afterok:{rf_job_id}
@@ -87,14 +87,14 @@ python {script_path} \\
     {shared_block}
 """
     
-    logging.warning("Continuing pipeline with ProteinMPNN after RFdiffusion")
+    logging.info("Continuing pipeline with ProteinMPNN after RFdiffusion")
     pmnn_s_path = os.path.join(args.filtered_designs_folder,"pmpnn.sh")
     write_sbatch(pmnn_s_path, pmpnn)
     pmpnn_job_id = submit_sbatch(pmnn_s_path,parsable=True)
-    logging.warning(f"Downstream job submitted: {pmpnn_job_id}")
+    logging.info(f"Downstream job submitted: {pmpnn_job_id}")
 
    # Build Boltz job, dependent on the previous ProteinMPNN array (will only run after)
-    logging.warning(f"Constructing Boltz command with flags and {shared_block}")
+    logging.info(f"Constructing Boltz command with flags and {shared_block}")
     boltz_sbatch_script = f"""#!/bin/bash
 #SBATCH --job-name=boltz
 #SBATCH --dependency=afterok:{pmpnn_job_id}
@@ -117,14 +117,14 @@ python {script_path} \\
     {shared_block}
 """
     
-    logging.warning("Continuing pipeline with Boltz after ProteinMPNN")
+    logging.info("Continuing pipeline with Boltz after ProteinMPNN")
     boltz_s_path = os.path.join(args.filtered_designs_folder,"boltz.sh")
     write_sbatch(boltz_s_path, boltz_sbatch_script)
     boltz_job_id = submit_sbatch(boltz_s_path,parsable=True)
-    logging.warning(f"Downstream job submitted: {boltz_job_id}")
+    logging.info(f"Downstream job submitted: {boltz_job_id}")
 
   # Build AF job, dependent on the previous Boltz array (will only run after)
-    logging.warning(f"Constructing AlphaFold (colab) command with flags and {shared_block}")
+    logging.info(f"Constructing AlphaFold (colab) command with flags and {shared_block}")
     af_sbatch_script = f"""#!/bin/bash
 #SBATCH --job-name=colabAF
 #SBATCH --dependency=afterok:{boltz_job_id}
@@ -148,14 +148,14 @@ python {script_path} \\
     {shared_block}
 """
     
-    logging.warning("Continuing pipeline with AlphaFold after Boltz")
+    logging.info("Continuing pipeline with AlphaFold after Boltz")
     af_s_path = os.path.join(args.filtered_designs_folder,"alphafold.sh")
     write_sbatch(af_s_path, af_sbatch_script)
     af_job_id = submit_sbatch(af_s_path,parsable=True)
-    logging.warning(f"Downstream job submitted: {af_job_id}")
+    logging.info(f"Downstream job submitted: {af_job_id}")
 
     #Build final result analysis job, dependent on the previous Boltz array (will only run after)
-    logging.warning(f"Constructing Analysis command with flags and {shared_block}")
+    logging.info(f"Constructing Analysis command with flags and {shared_block}")
     analysis_sbatch_script = f"""#!/bin/bash
 #SBATCH --job-name=post
 #SBATCH --nodes=1
@@ -178,11 +178,11 @@ python {script_path} \\
     {shared_block}
 """
     
-    logging.warning("Continuing pipeline with result analysis after Boltz")
+    logging.info("Continuing pipeline with result analysis after Boltz")
     analysis_s_path = os.path.join(args.filtered_designs_folder,"analysis.sh")
     write_sbatch(analysis_s_path, analysis_sbatch_script)
     result_job_id = submit_sbatch(analysis_s_path,parsable=True)
-    logging.warning(f"Downstream job submitted: {result_job_id}")
+    logging.info(f"Downstream job submitted: {result_job_id}")
 
 #-------------------------------------------- Main --------------------------------------------------#
 
@@ -327,26 +327,26 @@ def main():
     logging.basicConfig(
         filename=args.logfile,
         filemode='a',
-        level=logging.DEBUG,
+        level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
-    logging.warning("Starting the protein design pipeline.")
+    logging.info("Starting the protein design pipeline.")
 
     console = logging.StreamHandler()
-    console.setLevel(logging.WARNING)
+    console.setLevel(logging.INFO)
     logging.getLogger().addHandler(console)
 
     try:
-        logging.warning(f"Called with {_internal_flags(sys.argv[1:],False)}")
+        logging.debug(f"Called with {_internal_flags(sys.argv[1:],False)}")
         if not args.no_validate_inputs:
             #Validate inputs
             validate_input(args)
 
         if args.run_array:
-             logging.warning("Preparing master job")
+             logging.info("Preparing master job")
              launch_master(args,os.path.abspath(sys.argv[0]))
-             logging.warning("Master job exiting after scheduling children")
+             logging.info("Master job exiting after scheduling children")
              sys.exit(0)
 
         if args.only_rfdiff:
@@ -368,11 +368,11 @@ def main():
 
         if not args.skip_rfdiff:
             # Run RFdiffusion 
-            logging.warning("Running RFdiffusion script...")
+            logging.debug("Running RFdiffusion script...")
             run_rfdiffusion(args)
-            logging.warning("RFdiffusion script executed successfully.")
+            logging.debug("RFdiffusion script executed successfully.")
         else:
-            logging.warning("Skipping RFdiffusion step")  
+            logging.debug("Skipping RFdiffusion step")  
 
         if not args.only_rfdiff: 
 
@@ -383,9 +383,9 @@ def main():
                     args.run_pmpnn_for_length = args.min_length+int(os.environ["SLURM_ARRAY_TASK_ID"])
 
                 # Run ProteinMPNN 
-                logging.warning("Running ProteinMPNN script...")
+                logging.debug("Running ProteinMPNN script...")
                 run_proteinMPNN(args)
-                logging.warning("ProteinMPNN script executed successfully.")
+                logging.debug("ProteinMPNN script executed successfully.")
 
             if not args.only_pmpnn:
                 if not args.skip_boltz:
@@ -395,9 +395,9 @@ def main():
                         args.run_boltz_for_length = args.min_length+int(os.environ["SLURM_ARRAY_TASK_ID"])
 
                     # Run Boltz 
-                    logging.warning("Running Boltz script...")
+                    logging.debug("Running Boltz script...")
                     run_boltz(args)
-                    logging.warning("Boltz script executed successfully.")
+                    logging.debug("Boltz script executed successfully.")
 
                 if not args.only_boltz:
                     if not args.skip_af:
@@ -408,16 +408,16 @@ def main():
                             args.run_boltz_for_length = args.min_length+int(os.environ["SLURM_ARRAY_TASK_ID"])
 
                         # Run AlphaFold
-                        logging.warning("Running AlphaFold script...")
+                        logging.debug("Running AlphaFold script...")
                         run_af(args)
-                        logging.warning("AlphaFold script executed successfully.")
+                        logging.debug("AlphaFold script executed successfully.")
 
                     if not args.only_af:    
                         # Compare Boltz Predictions with original structure, calculate selection metrics, select best candidates and plot
-                        logging.warning("Analyzing Boltz outputs...")
+                        logging.info("Analyzing outputs...")
                         run_analysis(args)
-                        logging.warning("Analysis executed successfully.")
-                        logging.warning("Pipeline script executed successfully.")
+                        logging.info("Analysis executed successfully.")
+                        logging.info("Pipeline script executed successfully.")
                     else:
                         logging.warning("Only AlphaFold was executed; exiting.")
                 else:
