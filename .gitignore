@@ -1,0 +1,100 @@
+# -------------------- General / OS --------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+*.swp
+*.swo
+
+# -------------------- Python --------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+.python-version
+.venv/
+venv/
+env/
+.conda-env/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+.ipynb_checkpoints/
+
+# -------------------- Editors / IDEs --------------------
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.sample.json
+.idea/
+*.code-workspace
+
+# -------------------- Logs & diagnostics --------------------
+logs/
+*.log
+*.out
+*.err
+*.pid
+*.seed
+*.stackdump
+
+# -------------------- Data / results (generated) --------------------
+# PDBs, NPZ/NPY matrices, FASTA, JSONL, CSV, plots, etc.
+*.pdb
+*.cif
+*.mtz
+*.npz
+*.npy
+*.fa
+*.fasta
+*.jsonl
+*.csv
+*.tsv
+*.png
+*.pdf
+*.svg
+
+# Stage output folders (created by scripts)
+outputs/
+results/
+runs/
+artifacts/
+figures/
+plots/
+tmp/
+temp/
+.cache/
+
+# RFdiffusion / ProteinMPNN / Boltz / AF stage artifacts
+rf_outputs/
+pm_jsonl/
+pmpnn_outputs/
+boltz_outputs/
+af_outputs/
+analysis_outputs/
+cavities/
+
+# SLURM batch scripts that get auto‑generated into filtered design folders
+*rf_array.sh
+*pmpnn.sh
+*boltz.sh
+*alphafold.sh
+*analysis.sh
+
+# -------------------- Security --------------------
+# Environment & secrets 
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# -------------------- Whitelists --------------------
+!examples/**/*
