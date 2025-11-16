@@ -156,11 +156,11 @@ python {script_path} \\
 
     #Build final result analysis job, dependent on the previous Boltz array (will only run after)
     logging.warning(f"Constructing Analysis command with flags and {shared_block}")
-    # add : #SBATCH --dependency=afterok:{af_job_id}
     analysis_sbatch_script = f"""#!/bin/bash
 #SBATCH --job-name=post
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=1
+#SBATCH --dependency=afterok:{af_job_id}
 #SBATCH --cpus-per-gpu=2
 #SBatch --qos:gpu
 #SBATCH --mem=80g
