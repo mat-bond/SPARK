@@ -198,6 +198,12 @@ produced by `utils.build_lut_from_contig(...)`. During this walk it increments c
 
 ---
 
+## SLURM / SBATCH remarks
+
+If using the pipeline in array mode (batch jobs), modify the SLURM submission scripts in `pipeline.py` to match your local slurm configurations. There is one SBATCH script per step (RFdiffusion, PMPNN, ...).
+
+---
+
 ## Quick start (per stage)
 
 Below is a single end‑to‑end invocation of **`pipeline.py`** that matches the actual CLI flags.
