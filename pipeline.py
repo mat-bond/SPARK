@@ -40,119 +40,119 @@ def launch_master(args, script_path):
 
     logging.debug(f"Constructing rfdiffusion command with flags and {shared_block}")
 
-#     rf_array = f"""#!/bin/bash
-# #SBATCH --job-name=rf_array
-# #SBATCH --nodes=1
-# #SBATCH --gpus-per-node=1
-# #SBATCH --cpus-per-gpu=4
-# #SBatch --qos:gpu
-# #SBATCH --mem=80g
-# #SBATCH --time=30:00:00
-# #SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
-# #SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
-# #SBATCH --array=0-{length}
+    rf_array = f"""#!/bin/bash
+#SBATCH --job-name=rf_array
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-gpu=4
+#SBatch --qos:gpu
+#SBATCH --mem=80g
+#SBATCH --time=30:00:00
+#SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
+#SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
+#SBATCH --array=0-{length}
 
-# python {script_path} \\
-#     --no_validate_inputs \\
-#     --no_run_array \\
-#     --only_rfdiff \\
-#     {shared_block}
-# """
-#     logging.warning("Submitting arrays for RFdiffusion")
-#     rf_s_path = os.path.join(args.filtered_designs_folder,"rf_array.sh")
-#     write_sbatch(rf_s_path, rf_array)
-#     rf_job_id = submit_sbatch(rf_s_path, parsable=True)
-#     logging.warning(f"RF array job submitted: {rf_job_id}")
+python {script_path} \\
+    --no_validate_inputs \\
+    --no_run_array \\
+    --only_rfdiff \\
+    {shared_block}
+"""
+    logging.warning("Submitting arrays for RFdiffusion")
+    rf_s_path = os.path.join(args.filtered_designs_folder,"rf_array.sh")
+    write_sbatch(rf_s_path, rf_array)
+    rf_job_id = submit_sbatch(rf_s_path, parsable=True)
+    logging.warning(f"RF array job submitted: {rf_job_id}")
 
-#     # Build ProteinMPNN job, dependent on the previous RFDiffusion array
-#     logging.warning(f"Constructing pmpnn command with flags and {shared_block}")
-#     pmpnn = f"""#!/bin/bash
-# #SBATCH --job-name=pmpnn
-# #SBATCH --dependency=afterok:{rf_job_id}
-# #SBATCH --nodes=1
-# #SBATCH --gpus-per-node=1
-# #SBATCH --cpus-per-gpu=4
-# #SBatch --qos:gpu
-# #SBATCH --mem=80g
-# #SBATCH --time=16:00:00
-# #SBATCH --array=0-{length}
-# #SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
-# #SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
+    # Build ProteinMPNN job, dependent on the previous RFDiffusion array
+    logging.warning(f"Constructing pmpnn command with flags and {shared_block}")
+    pmpnn = f"""#!/bin/bash
+#SBATCH --job-name=pmpnn
+#SBATCH --dependency=afterok:{rf_job_id}
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-gpu=4
+#SBatch --qos:gpu
+#SBATCH --mem=80g
+#SBATCH --time=16:00:00
+#SBATCH --array=0-{length}
+#SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
+#SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
 
-# python {script_path} \\
-#     --no_validate_inputs \\
-#     --no_run_array \\
-#     --skip_rfdiff \\
-#     --only_pmpnn \\
-#     {shared_block}
-# """
+python {script_path} \\
+    --no_validate_inputs \\
+    --no_run_array \\
+    --skip_rfdiff \\
+    --only_pmpnn \\
+    {shared_block}
+"""
     
-#     logging.warning("Continuing pipeline with ProteinMPNN after RFdiffusion")
-#     pmnn_s_path = os.path.join(args.filtered_designs_folder,"pmpnn.sh")
-#     write_sbatch(pmnn_s_path, pmpnn)
-#     pmpnn_job_id = submit_sbatch(pmnn_s_path,parsable=True)
-#     logging.warning(f"Downstream job submitted: {pmpnn_job_id}")
+    logging.warning("Continuing pipeline with ProteinMPNN after RFdiffusion")
+    pmnn_s_path = os.path.join(args.filtered_designs_folder,"pmpnn.sh")
+    write_sbatch(pmnn_s_path, pmpnn)
+    pmpnn_job_id = submit_sbatch(pmnn_s_path,parsable=True)
+    logging.warning(f"Downstream job submitted: {pmpnn_job_id}")
 
-#    # Build Boltz job, dependent on the previous ProteinMPNN array (will only run after)
-#     logging.warning(f"Constructing Boltz command with flags and {shared_block}")
-#     boltz_sbatch_script = f"""#!/bin/bash
-# #SBATCH --job-name=boltz
-# #SBATCH --dependency=afterok:{pmpnn_job_id}
-# #SBATCH --nodes=1
-# #SBATCH --gpus-per-node=2
-# #SBATCH --cpus-per-gpu=2
-# #SBatch --qos:gpu
-# #SBATCH --mem=80g
-# #SBATCH --time=16:00:00
-# #SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
-# #SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
-# #SBATCH --array=0-{length}
+   # Build Boltz job, dependent on the previous ProteinMPNN array (will only run after)
+    logging.warning(f"Constructing Boltz command with flags and {shared_block}")
+    boltz_sbatch_script = f"""#!/bin/bash
+#SBATCH --job-name=boltz
+#SBATCH --dependency=afterok:{pmpnn_job_id}
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=2
+#SBATCH --cpus-per-gpu=2
+#SBatch --qos:gpu
+#SBATCH --mem=80g
+#SBATCH --time=16:00:00
+#SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
+#SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
+#SBATCH --array=0-{length}
 
-# python {script_path} \\
-#     --no_validate_inputs \\
-#     --no_run_array \\
-#     --skip_rfdiff \\
-#     --skip_pmpnn \\
-#     --only_boltz \\
-#     {shared_block}
-# """
+python {script_path} \\
+    --no_validate_inputs \\
+    --no_run_array \\
+    --skip_rfdiff \\
+    --skip_pmpnn \\
+    --only_boltz \\
+    {shared_block}
+"""
     
-#     logging.warning("Continuing pipeline with Boltz after ProteinMPNN")
-#     boltz_s_path = os.path.join(args.filtered_designs_folder,"boltz.sh")
-#     write_sbatch(boltz_s_path, boltz_sbatch_script)
-#     boltz_job_id = submit_sbatch(boltz_s_path,parsable=True)
-#     logging.warning(f"Downstream job submitted: {boltz_job_id}")
+    logging.warning("Continuing pipeline with Boltz after ProteinMPNN")
+    boltz_s_path = os.path.join(args.filtered_designs_folder,"boltz.sh")
+    write_sbatch(boltz_s_path, boltz_sbatch_script)
+    boltz_job_id = submit_sbatch(boltz_s_path,parsable=True)
+    logging.warning(f"Downstream job submitted: {boltz_job_id}")
 
-#   # Build AF job, dependent on the previous Boltz array (will only run after)
-#     logging.warning(f"Constructing AlphaFold (colab) command with flags and {shared_block}")
-#     af_sbatch_script = f"""#!/bin/bash
-# #SBATCH --job-name=colabAF
-# #SBATCH --dependency=afterok:{boltz_job_id}
-# #SBATCH --nodes=1
-# #SBATCH --gpus-per-node=1
-# #SBATCH --cpus-per-gpu=1
-# #SBatch --qos:gpu
-# #SBATCH --mem=80g
-# #SBATCH --time=16:00:00
-# #SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
-# #SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
-# #SBATCH --array=0-{length}
+  # Build AF job, dependent on the previous Boltz array (will only run after)
+    logging.warning(f"Constructing AlphaFold (colab) command with flags and {shared_block}")
+    af_sbatch_script = f"""#!/bin/bash
+#SBATCH --job-name=colabAF
+#SBATCH --dependency=afterok:{boltz_job_id}
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=1
+#SBATCH --cpus-per-gpu=1
+#SBatch --qos:gpu
+#SBATCH --mem=80g
+#SBATCH --time=16:00:00
+#SBATCH --output={args.filtered_designs_folder}/logs/pipeline_lasv.out 
+#SBATCH --error={args.filtered_designs_folder}/logs/pipeline_lasv.err
+#SBATCH --array=0-{length}
 
-# python {script_path} \\
-#     --no_validate_inputs \\
-#     --no_run_array \\
-#     --skip_rfdiff \\
-#     --skip_pmpnn \\
-#     --skip_boltz \\
-#     --only_af \\
-#     {shared_block}
-# """
+python {script_path} \\
+    --no_validate_inputs \\
+    --no_run_array \\
+    --skip_rfdiff \\
+    --skip_pmpnn \\
+    --skip_boltz \\
+    --only_af \\
+    {shared_block}
+"""
     
-#     logging.warning("Continuing pipeline with AlphaFold after Boltz")
-#     af_s_path = os.path.join(args.filtered_designs_folder,"alphafold.sh")
-#     write_sbatch(af_s_path, af_sbatch_script)
-#     af_job_id = submit_sbatch(af_s_path,parsable=True)
-#     logging.warning(f"Downstream job submitted: {af_job_id}")
+    logging.warning("Continuing pipeline with AlphaFold after Boltz")
+    af_s_path = os.path.join(args.filtered_designs_folder,"alphafold.sh")
+    write_sbatch(af_s_path, af_sbatch_script)
+    af_job_id = submit_sbatch(af_s_path,parsable=True)
+    logging.warning(f"Downstream job submitted: {af_job_id}")
 
     #Build final result analysis job, dependent on the previous Boltz array (will only run after)
     logging.warning(f"Constructing Analysis command with flags and {shared_block}")
