@@ -22,7 +22,7 @@ for structure prediction, and then aggregates metrics/plots (RMSD, pLDDT, PAE/PD
 - `plots_and_graphs.py` — helper plotting (histograms/scatter/PAE heatmaps).   
 - `cavity_analysis.py` — cavity metrics using **pyKVFinder**.   
 - `utils.py`, `constants.py` — shared helpers (contig parsing, LUTs, paths, enums).    
-- `alphafold_script.py` (your “missing file”) — reads a **YAML** with `sequences:`,
+- `alphafold_script.py` — reads a **YAML** with `sequences:`,
   feeds **colabdesign**/AlphaFold (`mk_af_model`) and writes a predicted PDB.
 
 ---
