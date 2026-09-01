@@ -45,7 +45,6 @@ def test_build_proteinmpnn_cli_adds_optional_flags():
         fixed_jsonl="/tmp/fixed.jsonl",
         tied_jsonl="/tmp/tied.jsonl",
         output_folder="/tmp/out",
-        glycosylate_best_designs=True,
     )
     assert "--use_soluble_model" in cli
 

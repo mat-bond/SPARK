@@ -339,9 +339,6 @@ def calculate_cavity_metrics(args,pdb_path, linker_length)-> Tuple[
                                                                 ]:
     
     # Find the directory to the cavity script
-    # Path to *this* file
-    this_file = pathlib.Path(__file__).resolve()
-    # Directory that contains it
     this_file = pathlib.Path(__file__).resolve()
 
     # src/stages/analysis.py -> src/

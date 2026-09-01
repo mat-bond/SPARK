@@ -141,7 +141,10 @@ def build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_folder
     f"--out_folder={output_folder}",
     # Add these if using solubilization mode
     *(["--use_soluble_model"] if args.pm_sol else []),
+
+    # Reserved for a future glycosylation workflow; not currently exposed by the SPARK CLI.
     *(["--unconditional_probs_only=1"] if glycosylate_best_designs else []),
+    
     ]
     return pm_args
 
@@ -210,10 +213,7 @@ def run_proteinMPNN(args,length=None,pdb_name=None,output_path=None):
         logging.debug(f"ProteinMPNN output folder: {output_subfolder}")
 
         # build the actual CLI args, pointing at the files
-        if pdb_name is None:
-            pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder)
-        else:
-            pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder)
+        pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder)
         logging.debug(f"ProteinMPNN args: {pm_args}")
 
         # run ProteinMPNN for this length
