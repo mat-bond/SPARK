@@ -5,11 +5,11 @@ import sys
 import argparse as arg
 import os
 from utils import validate_input,write_sbatch,submit_sbatch,validate_dir
-from rfdiffusion_pipeline import run_rfdiffusion
-from proteinmpnn_pipeline import run_proteinMPNN
-from boltz_pipeline import run_boltz
-from analysis import run_analysis
-from alphafold_pipeline import run_af
+from pipeline.src.stages.rfdiffusion import run_rfdiffusion
+from pipeline.src.stages.proteinmpnn import run_proteinMPNN
+from pipeline.src.stages.boltz import run_boltz
+from pipeline.src.stages.analysis import run_analysis
+from pipeline.src.stages.alphafold import run_af
 #-------------------------------------------- Helpers  --------------------------------------------------#
 def _internal_flags(raw_argv: list[str],strip=True) -> list[str]:
     """
@@ -234,7 +234,7 @@ def main():
     rf_group.add_argument('--rf_symmetry',dest='rf_symmetry',type=str)
     rf_group.add_argument('--rf_compact',dest='rf_compact',action="store_true")
 
-    # ProteinMPNN arguments
+    # ProteinMPNN arguments.  
     pm_group = parser.add_argument_group('ProteinMPNN parameters')
     pm_group.add_argument('--pm_jsonl_path', dest='pm_jsonl', type=str, required=True)
     pm_group.add_argument('--pm_proteinmpnn_path',dest='pm_fold', type=str, required=True, 
