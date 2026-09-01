@@ -240,15 +240,13 @@ def _make_AF_args(args):
 def run_af(args: arg.Namespace):
     # Run AF in env args.af_env for length args.run_boltz_for_length
     scriptEnv = args.af_env
-
+    
     # Find the directory to the alphafold script
-    # Path to *this* file
-    this_file = pathlib.Path(__file__).resolve()
-    # Directory that contains it
     this_file = pathlib.Path(__file__).resolve()
     src_dir = this_file.parent.parent
-
     scriptPath = str(src_dir / "alphafold_script.py")
+
+    scriptArgs = _make_AF_args(args)
 
     result = run_script_in_env(scriptEnv,scriptPath,scriptArgs,return_result=True)
     logging.debug(f"AlphaFold script result: {result}")

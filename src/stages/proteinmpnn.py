@@ -4,7 +4,7 @@ import json
 import os
 import re
 import shutil
-from .utils import validate_dir, validate_file_path, run_script_in_env,_get_rf_diffusion_model
+from utils import validate_dir, validate_file_path, run_script_in_env,_get_rf_diffusion_model
 
 #-------------------------------------- ProteinMPNN utility --------------------------------------------#
 def run_parse_multiple_chains_py(args,jsonl_input, jsonl_output_file):
