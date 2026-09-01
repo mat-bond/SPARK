@@ -121,11 +121,6 @@ def test_run_analysis_applies_cutoffs_and_final_rmsd_ranking(tmp_path, monkeypat
     assert len(captured["designs"]) == 1
     assert captured["designs"][0][Stats.PATH] == "keep_best.pdb"
 
-
-@pytest.mark.xfail(
-    reason="Known ambiguity: optional None pLDDT/PAE/PDE cutoffs are currently used as numeric bisect cutoffs.",
-    strict=False,
-)
 def test_none_cutoff_means_filter_is_disabled(tmp_path, monkeypatch):
     rows = [_stats_row("candidate.pdb", rmsd=1.0, plddt=0.5, pae=20.0, pde=20.0)]
     captured = {}

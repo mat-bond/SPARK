@@ -609,15 +609,19 @@ def run_analysis(args):
     best_designs = stats[:_index_above_closest_highest__value(stats,Stats.RMSD,args.rmsd_cutoff)]
 
     # Within the designs with the best rmsd, only keep those with pLDDT >= cutoff
-    best_designs.sort(key=lambda t: t[Stats.DES_PLDDT])
-    best_designs = best_designs[_index_of_closest_lowest_value(best_designs,Stats.DES_PLDDT,args.plddt_cutoff):]
+    if args.plddt_cutoff is not None:
+        best_designs.sort(key=lambda t: t[Stats.DES_PLDDT])
+        best_designs = best_designs[_index_of_closest_lowest_value(best_designs,Stats.DES_PLDDT,args.plddt_cutoff):]
+
     # Keep pAE <= cutoff
-    best_designs.sort(key=lambda t: t[Stats.DES_PAE])
-    best_designs = best_designs[:_index_above_closest_highest__value(best_designs,Stats.DES_PAE,args.pae_cutoff)] 
+    if args.pae_cutoff is not None:
+        best_designs.sort(key=lambda t: t[Stats.DES_PAE])
+        best_designs = best_designs[:_index_above_closest_highest__value(best_designs,Stats.DES_PAE,args.pae_cutoff)] 
 
     # Keep pDE <= cutoff
-    best_designs.sort(key=lambda t: t[Stats.DES_PDE]) 
-    best_designs = best_designs[:_index_above_closest_highest__value(best_designs,Stats.DES_PDE,args.pde_cutoff)] 
+    if args.pde_cutoff is not None:
+        best_designs.sort(key=lambda t: t[Stats.DES_PDE]) 
+        best_designs = best_designs[:_index_above_closest_highest__value(best_designs,Stats.DES_PDE,args.pde_cutoff)] 
 
     # Select final_selection_amount amount of designs with lowest RMSD in the designed regions
     best_designs.sort(key=lambda t: t[Stats.RMSD],reverse=False)
