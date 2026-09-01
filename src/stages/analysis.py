@@ -16,9 +16,9 @@ import matplotlib # type: ignore
 matplotlib.use("Agg")   # non-interactive backend
 import json as js
 import pandas as pd # type: ignore
-from .utils import run_script_in_env,_as_float,_get_residue_strings,basic_format_residues,build_lut_from_contig,_get_file_from_same_dir,_to_int_na,_truthy,chain_offsets_from_lut,global_index,_index_of_closest_lowest_value,_index_above_closest_highest__value,_get_rf_diffusion_model
-from .constants import Stats
-from .plots_and_graphs import create_stats_graphs,_make_pae_heat_map
+from utils import run_script_in_env,_as_float,_get_residue_strings,basic_format_residues,build_lut_from_contig,_get_file_from_same_dir,_to_int_na,_truthy,chain_offsets_from_lut,global_index,_index_of_closest_lowest_value,_index_above_closest_highest__value,_get_rf_diffusion_model
+from constants import Stats
+from plots_and_graphs import create_stats_graphs,_make_pae_heat_map
 
 #-------------------------------------- Filtering  --------------------------------------------#
 def rmsd_pymol_string(new_id,first_res,last_res):

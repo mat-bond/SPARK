@@ -5,7 +5,7 @@ import os
 import pathlib
 import re
 import gemmi
-from pipeline.spike_design.utils import parse_contig, run_script_in_env
+from utils import parse_contig, run_script_in_env
 
 def last_two_ca_positions(chain: gemmi.Chain):
     logging.debug(f"[last_two_ca_positions] Enter chain='{getattr(chain,'name',None)}' with {len(chain)} residues")
@@ -245,10 +245,10 @@ def run_af(args: arg.Namespace):
     # Path to *this* file
     this_file = pathlib.Path(__file__).resolve()
     # Directory that contains it
-    this_dir = this_file.parent
-    scriptPath = str(os.path.join(this_dir,"alphafold_script.py"))
+    this_file = pathlib.Path(__file__).resolve()
+    src_dir = this_file.parent.parent
 
-    scriptArgs = _make_AF_args(args)
+    scriptPath = str(src_dir / "alphafold_script.py")
 
     result = run_script_in_env(scriptEnv,scriptPath,scriptArgs,return_result=True)
     logging.debug(f"AlphaFold script result: {result}")
