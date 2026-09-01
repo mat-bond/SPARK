@@ -453,6 +453,9 @@ def create_boltz_yaml(args):
                 continue
             boltz_dir = os.path.join(args.b_yaml, length_name)
             os.makedirs(boltz_dir, exist_ok=True)
+
+            sequences = sequences[:args.b_designs_from_pm]
+
             for idx, seq in enumerate(sequences, start=1):
                 new_chains = []
                 chains = seq.split("/")

@@ -505,6 +505,8 @@ def validate_input(args):
     this_dir = this_file.parent
 
     validate_file_path(os.path.join(this_dir,"cavity_analysis.py"))
+
+    validate_positive(args.b_designs_from_pm, "b_designs_from_pm")
     
     logging.info("All input arguments validated successfully")
     

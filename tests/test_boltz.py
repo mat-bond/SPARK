@@ -101,11 +101,6 @@ def test_create_boltz_yaml_converts_each_designed_sequence(tmp_path):
     assert first["sequences"][0]["protein"]["sequence"] == "BBBBBB"
     assert second["sequences"][0]["protein"]["sequence"] == "CCCCCC"
 
-
-@pytest.mark.xfail(
-    reason="Known bug: create_boltz_yaml currently ignores args.b_designs_from_pm.",
-    strict=False,
-)
 def test_create_boltz_yaml_respects_b_designs_from_pm_limit(tmp_path):
     pm_output = tmp_path / "proteinmpnn"
     seq_dir = pm_output / "length_4" / "seqs"
