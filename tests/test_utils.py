@@ -64,3 +64,19 @@ def test_global_index_maps_chain_local_numbering_to_zero_based_global_index():
 def test_build_lut_rejects_multiple_breaks_in_one_input_chain():
     with pytest.raises(ValueError):
         build_lut_from_contig(4, ["A1-2/BREAK/B1-2/BREAK/C1-2"])
+
+def test_build_lut_allows_one_break_per_input_chain():
+    lut = build_lut_from_contig(
+        4,
+        [
+            "A1-2/BREAK/B1-2",
+            "C1-2/BREAK/D1-2",
+        ],
+    )
+
+    assert lut == [
+        ("A1-2", "A1-2"),
+        ("B1-2", "B1-2"),
+        ("C1-2", "C1-2"),
+        ("D1-2", "D1-2"),
+    ]

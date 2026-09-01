@@ -198,9 +198,9 @@ def build_lut_from_contig(linker_length, chains_full):
     link_count = 0
     halflink_count = 0
     des_count = 0
-    break_count = 0
     offset = 0
     for i, chain in enumerate(chains_full):
+        break_count = 0
         if i+offset >= 26:
             raise ValueError("More than 26 chains not supported")
         chain_id = string.ascii_uppercase[i+offset]
