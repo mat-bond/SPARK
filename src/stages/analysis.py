@@ -16,9 +16,9 @@ import matplotlib # type: ignore
 matplotlib.use("Agg")   # non-interactive backend
 import json as js
 import pandas as pd # type: ignore
-from utils import run_script_in_env,_as_float,_get_residue_strings,basic_format_residues,build_lut_from_contig,_get_file_from_same_dir,_to_int_na,_truthy,chain_offsets_from_lut,global_index,_index_of_closest_lowest_value,_index_above_closest_highest__value,_get_rf_diffusion_model
-from constants import Stats
-from plots_and_graphs import create_stats_graphs,_make_pae_heat_map
+from .utils import run_script_in_env,_as_float,_get_residue_strings,basic_format_residues,build_lut_from_contig,_get_file_from_same_dir,_to_int_na,_truthy,chain_offsets_from_lut,global_index,_index_of_closest_lowest_value,_index_above_closest_highest__value,_get_rf_diffusion_model
+from .constants import Stats
+from .plots_and_graphs import create_stats_graphs,_make_pae_heat_map
 
 #-------------------------------------- Filtering  --------------------------------------------#
 def rmsd_pymol_string(new_id,first_res,last_res):
@@ -342,8 +342,15 @@ def calculate_cavity_metrics(args,pdb_path, linker_length)-> Tuple[
     # Path to *this* file
     this_file = pathlib.Path(__file__).resolve()
     # Directory that contains it
-    this_dir = this_file.parent
-    cavity_analysis_script_path = str(os.path.join(this_dir,"cavity_analysis.py"))
+    this_file = pathlib.Path(__file__).resolve()
+
+    # src/stages/analysis.py -> src/
+    src_dir = this_file.parent.parent
+
+    cavity_analysis_script_path = str(
+        src_dir / "cavity_analysis.py"
+    )
+
 
     # Build arguments for cavity script
     script_args = _get_cavity_script_args(args,pdb_path, linker_length)

@@ -10,7 +10,7 @@ import numpy as np # type: ignore
 import matplotlib # type: ignore
 matplotlib.use("Agg")   # non-interactive backend
 import matplotlib.pyplot as plt # type: ignore
-from utils import _get_designed_residue_indices_n_offsets
+from pipeline.spike_design.utils import _get_designed_residue_indices_n_offsets
 
 #--------------------------------- Helpers---------------------------------#
 

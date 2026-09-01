@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Tuple
 import string 
 import yaml 
 import gemmi  # type: ignore
-from utils import run_command_in_env, parse_contig
+from .utils import run_command_in_env, parse_contig
 
 #-------------------------------------- Boltz utility --------------------------------------------#
 def _length_dirs(root: str,run_boltz_for_length: int | None):

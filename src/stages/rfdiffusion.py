@@ -4,7 +4,7 @@ import json
 import os
 import re
 from typing import List, Tuple
-from utils import run_script_in_env, parse_contig
+from .utils import run_script_in_env, parse_contig
 
 #-------------------------------------- RFdiffusion utility --------------------------------------------
 

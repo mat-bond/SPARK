@@ -5,11 +5,11 @@ import sys
 import argparse as arg
 import os
 from utils import validate_input,write_sbatch,submit_sbatch,validate_dir
-from pipeline.src.stages.rfdiffusion import run_rfdiffusion
-from pipeline.src.stages.proteinmpnn import run_proteinMPNN
-from pipeline.src.stages.boltz import run_boltz
-from pipeline.src.stages.analysis import run_analysis
-from pipeline.src.stages.alphafold import run_af
+from stages.rfdiffusion import run_rfdiffusion
+from stages.proteinmpnn import run_proteinMPNN
+from stages.boltz import run_boltz
+from stages.analysis import run_analysis
+from stages.alphafold import run_af
 #-------------------------------------------- Helpers  --------------------------------------------------#
 def _internal_flags(raw_argv: list[str],strip=True) -> list[str]:
     """
