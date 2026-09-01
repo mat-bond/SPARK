@@ -61,11 +61,6 @@ def test_global_index_maps_chain_local_numbering_to_zero_based_global_index():
     assert global_index(offsets, "B", 1) == 5
     assert global_index(offsets, "B", 4) == 8
 
-
-@pytest.mark.xfail(
-    reason="Known TODO: multiple BREAK tokens are not rejected yet.",
-    strict=False,
-)
 def test_build_lut_rejects_multiple_breaks_in_one_input_chain():
     with pytest.raises(ValueError):
         build_lut_from_contig(4, ["A1-2/BREAK/B1-2/BREAK/C1-2"])

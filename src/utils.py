@@ -192,13 +192,13 @@ def parse_contig(contig_str: str, linker_length: int) -> int:
                 raise ValueError(f"Bad contig segment: {p}")
     return total
 
-# TODO : GUARD AGAINST MULTIPLE "BREAK" PER CHAIN
 def build_lut_from_contig(linker_length, chains_full):
     # Construct a look up table for old and new chain+residue ID's 
     lut = []
     link_count = 0
     halflink_count = 0
     des_count = 0
+    break_count = 0
     offset = 0
     for i, chain in enumerate(chains_full):
         if i+offset >= 26:
@@ -212,6 +212,11 @@ def build_lut_from_contig(linker_length, chains_full):
                 offset += 1
                 if i + offset >= 26:
                     raise ValueError("More than 26 chains not supported")
+                break_count += 1
+                if break_count > 1: 
+                    raise ValueError(
+                        f"Only one BREAK supported per input chain: {chain}"
+                    )
                 chain_id = string.ascii_uppercase[i+offset]
                 cumul = 0
                 continue
@@ -507,7 +512,7 @@ def validate_input(args):
     validate_file_path(os.path.join(this_dir,"cavity_analysis.py"))
 
     validate_positive(args.b_designs_from_pm, "b_designs_from_pm")
-    
+
     logging.info("All input arguments validated successfully")
     
 def run_script_in_env(scriptEnv: str, scriptPath: str, scriptArgs: list,return_result = False):
