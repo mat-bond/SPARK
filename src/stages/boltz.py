@@ -422,10 +422,11 @@ def _get_new_chain_break_positions(boltz_chain_break_contig,linker_length):
 
 def create_boltz_yaml(args):
     """
-    Convert *every* ProteinMPNN FASTA inside each length_X folder to one (or
-    many) Boltz‑formatted YAML(s):  one output file per *designed* sequence in
-    the input, skipping the original query sequence.  The filenames follow the
-    pattern produced by ``_derive_output_name`` ("…_Z.yml").
+    Convert ProteinMPNN FASTAs inside each length_X folder to Boltz-formatted
+    YAMLs, skipping the original query sequence and keeping at most
+    args.b_designs_from_pm designed sequences per FASTA.
+
+    The filenames follow the pattern produced by _derive_output_name ("…_Z.yml").
     """
     os.makedirs(args.b_yaml, exist_ok=True)
 
