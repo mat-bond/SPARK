@@ -29,7 +29,7 @@ def _get_sequence_from_yaml(yaml_path: str) -> List[Tuple[str, str]]:
         # Extract sequences block
         seq_block = doc.get("sequences")
         if isinstance(seq_block, dict):
-            logging.debug("sequences block is a dict; normalizing to a single-item list")
+            logging.debug("sequen<ces block is a dict; normalizing to a single-item list")
             seq_block = [seq_block] # Normalize a dict to a list
         expect(isinstance(seq_block, list), f"{yaml_path}.sequences", "must be a list (or a single mapping)")
         logging.debug(f"'sequences' has {len(seq_block)} entries")
