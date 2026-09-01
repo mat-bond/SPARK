@@ -176,7 +176,7 @@ def main():
     b_group.add_argument('--b_yaml', dest='b_yaml', type=str, required=True,
                           help='Directory to create the fasta files necessary for Boltz')
     b_group.add_argument('--b_designs_from_pm',dest='b_designs_from_pm', type=int, required=True,
-                         help='For eacj RFdiffusion desing, amount of sequences from ProteinMPNN to run Boltz on.')
+                         help='For each RFdiffusion design, amount of sequences from ProteinMPNN to run Boltz on.')
     b_group.add_argument('--b_recycling_steps', dest='b_recycling_steps', type=int,required=True,
                          help='Number of recycling steps for Boltz.')
     b_group.add_argument('--b_sampling_steps', dest='b_sampling_steps', type=int, required=True,
