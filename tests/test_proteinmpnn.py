@@ -50,11 +50,6 @@ def test_build_proteinmpnn_cli_adds_optional_flags():
     assert "--use_soluble_model" in cli
     assert "--unconditional_probs_only=1" in cli
 
-
-@pytest.mark.xfail(
-    reason="Known bug: single-design mode passes `unconditional_probs=` instead of `glycosylate_best_designs=`.",
-    strict=False,
-)
 def test_single_design_mode_reaches_runner_without_keyword_error(tmp_path, monkeypatch):
     rf_root = tmp_path / "rf"
     rf_len = rf_root / "length_10"

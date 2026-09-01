@@ -213,7 +213,7 @@ def run_proteinMPNN(args,length=None,pdb_name=None,output_path=None):
         if pdb_name is None:
             pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder)
         else:
-            pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder,unconditional_probs=args.glycosylate_best_designs)
+            pm_args = build_proteinMPNN_CLI(args,parsed_jsonl,fixed_jsonl,tied_jsonl,output_subfolder,glycosylate_best_designs=args.glycosylate_best_designs)
         logging.debug(f"ProteinMPNN args: {pm_args}")
 
         # run ProteinMPNN for this length
