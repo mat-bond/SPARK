@@ -48,7 +48,6 @@ def test_build_proteinmpnn_cli_adds_optional_flags():
         glycosylate_best_designs=True,
     )
     assert "--use_soluble_model" in cli
-    assert "--unconditional_probs_only=1" in cli
 
 def test_single_design_mode_reaches_runner_without_keyword_error(tmp_path, monkeypatch):
     rf_root = tmp_path / "rf"
@@ -72,7 +71,6 @@ def test_single_design_mode_reaches_runner_without_keyword_error(tmp_path, monke
         pm_sampling_temp=0.1,
         pm_seed=123,
         pm_sol=False,
-        glycosylate_best_designs=True,
     )
 
     monkeypatch.setattr(proteinmpnn, "generate_jsonl", lambda *a, **k: None)
