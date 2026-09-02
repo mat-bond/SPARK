@@ -1,4 +1,6 @@
-# Protein Design Pipeline (RFdiffusion → ProteinMPNN → Boltz → AF + Analysis)
+# SPARK
+
+**Spike Protein AI-driven Redesign for Kinetics and Immunogenicity**
 
 End‑to‑end, scriptable workflow for protein linker/backbone design and evaluation.
 It runs **RFdiffusion** for backbone sampling, **ProteinMPNN** for sequence design,
@@ -8,6 +10,10 @@ for structure prediction, and then aggregates metrics/plots (RMSD, pLDDT, PAE/PD
 > Quick mental model: you define contigs and a linker length range; the pipeline
 > generates candidates per length (`length_<N>/...`), designs sequences, evaluates,
 > predicts structures, and emits summary tables/plots.
+
+---
+
+> **Project status:** This repository documents a completed computational design campaign. Designs generated using this workflow were subsequently evaluated experimentally. No further large-scale in silico design runs are currently planned.
 
 ---
 
@@ -212,7 +218,13 @@ produced by `utils.build_lut_from_contig(...)`. During this walk it increments c
 
 ## SLURM / SBATCH remarks
 
-If using the pipeline in array mode (batch jobs), modify the SLURM submission scripts in `pipeline.py` to match your local slurm configurations. There is one SBATCH script per step (RFdiffusion, PMPNN, ...).
+SPARK can generate SLURM jobs or arrays for individual pipeline stages and
+submit them with stage dependencies. The public launcher remains `pipeline.py`,
+while the current SLURM job-generation implementation lives in `src/main.py`.
+
+The included resource requests were developed for the HPC environment used
+during the original computational campaign and may require modification for
+other clusters.
 
 ---
 
@@ -279,7 +291,7 @@ python pipeline.py \
   --pykvfinder_env pykv \
   --af_params_dir /abs/path/to/af/params \
   --metric_residues "A10-60 B20-70"
-````
+```
 
 ### Stage-selection switches
 - Run only RFdiffusion: `--only_rfdiff`
@@ -315,6 +327,31 @@ The pipeline’s AF stage uses template-driven flags
 
 ---
 
+## Testing
+
+SPARK includes lightweight regression tests covering pipeline-owned logic such as:
+
+- contig parsing and residue lookup-table generation;
+- RFdiffusion command and output handling;
+- ProteinMPNN command construction;
+- Boltz FASTA/YAML transformations;
+- analysis metrics and filtering behavior;
+- selected regression cases identified during development.
+
+The test suite does **not** execute RFdiffusion, ProteinMPNN, Boltz, AlphaFold, SLURM, or other computationally expensive external tools.
+
+Create the lightweight test environment with:
+
+```bash
+conda env create -f environment-test.yml
+conda activate spark-test
+python -m pytest
+```
+
+Tests are also run automatically with GitHub Actions on pushes and pull requests.
+
+---
+
 ## Notes & conventions
 
 - **File naming** is important for lookups (e.g., deducing linker length from `b_yaml_l{L}_{ID}` and finding the matching RFdiffusion model). 
@@ -326,6 +363,9 @@ The pipeline’s AF stage uses template-driven flags
 
 - **PyMOL not found**: install in a separate conda env and point `--py_env`. 
 - **Bad contig segment** errors: check the contig string syntax (see `utils.parse_contig`). 
-- **Multiple chains** in AF templates: `alphafold_pipeline.py` builds template structures chain‑wise and can append poly‑Ala stubs when needed. (Colabdesign AF requires the template sequence length to match exactly the input sequence length) 
+- **Multiple chains in AF templates**: `src/stages/alphafold.py` builds template
+  structures chain-wise and can append poly-Ala stubs when needed.
+  ColabDesign/AlphaFold requires template sequence lengths to match the
+  corresponding input sequence lengths.
 
 ---
