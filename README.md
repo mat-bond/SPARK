@@ -12,7 +12,7 @@ for structure prediction, and then aggregates metrics/plots (RMSD, pLDDT, PAE/PD
 ---
 
 ## Repository structure
-
+```text
 SPARK/
 ├── pipeline.py              # backwards-compatible command-line entry point
 ├── src/
@@ -31,7 +31,7 @@ SPARK/
 │   └── workers/
 │       └── alphafold_script.py
 └── tests/                   # lightweight regression tests
-
+```
 ---
 
 ## Requirements
