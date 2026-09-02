@@ -12,14 +12,17 @@ for structure prediction, and then aggregates metrics/plots (RMSD, pLDDT, PAE/PD
 ---
 
 ## Repository structure
+
 ```text
 SPARK/
-├── pipeline.py              # backwards-compatible command-line entry point
+├── pipeline.py              # backwards-compatible 
 ├── src/
 │   ├── main.py              # pipeline orchestration and CLI
 │   ├── utils.py             # shared parsing, validation, environment and SLURM helpers
 │   ├── constants.py         # shared constants and analysis indices
 │   ├── plots_and_graphs.py  # plotting helpers
+│   ├── alphafold_script.py  # backwards-compatible worker wrapper
+│   ├── cavity_analysis.py   # backwards-compatible metric wrapper
 │   ├── stages/
 │   │   ├── rfdiffusion.py
 │   │   ├── proteinmpnn.py
@@ -31,7 +34,6 @@ SPARK/
 │   └── workers/
 │       └── alphafold_script.py
 └── tests/                   # lightweight regression tests
-```
 ---
 
 ## Requirements
