@@ -34,6 +34,9 @@ SPARK/
 │   └── workers/
 │       └── alphafold_script.py
 └── tests/                   # lightweight regression tests
+
+
+```
 ---
 
 ## Requirements
