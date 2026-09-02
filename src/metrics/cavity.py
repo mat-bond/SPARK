@@ -7,7 +7,7 @@ import math
 import sys
 from typing import Dict, List, Tuple
 import pyKVFinder as kv # type: ignore
-from pipeline.spike_design.utils import _get_residue_strings,basic_format_residues,build_lut_from_contig
+from utils import _get_residue_strings,basic_format_residues,build_lut_from_contig
 
 def _get_fixed_residue_set(args: Namespace, linker_length: int) -> set[Tuple[str,int]]:
     residue_set = set()
