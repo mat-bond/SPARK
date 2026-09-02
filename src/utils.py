@@ -466,9 +466,13 @@ def validate_input(args):
     validate_positive(int(args.rf_num_designs), "rf_num_designs")
     validate_positive(int(args.min_length), "min_length")
     validate_positive(int(args.max_length), "max_length")
-    p = float(args.b_percent_of_template)
-    if not math.isfinite(p) or not (0.0 <= p <= 1.0):
-        raise ValueError("b_percent_of_template must be a finite number in [0, 1].")
+
+    if args.b_percent_of_template is not None:
+        p = args.b_percent_of_template
+        if not math.isfinite(p) or not (0.0 <= p <= 1.0):
+            raise ValueError(
+                "b_percent_of_template must be a finite number in [0, 1]."
+            )
 
     # ProteinMPNN
     validate_dir(args.pm_output)
