@@ -486,6 +486,13 @@ def validate_input(args):
     if args.b_use_fixed_residues_template:
         if not args.b_fixed_residue_cif_folder:
             raise ValueError(f"--b_fixed_residue_cif_folder is required when --b_use_fixed_residues_template is set.")
+
+        if not args.template_residues:
+            raise ValueError(
+                "--template_residues is required when "
+                "--b_use_fixed_residues_template is set."
+            )
+    
         validate_dir(args.b_fixed_residue_cif_folder)
     validate_positive(int(args.b_recycling_steps), "b_recycling_steps")
     validate_positive(int(args.b_sampling_steps), "b_sampling_steps")
