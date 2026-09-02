@@ -371,8 +371,13 @@ def _get_full_boltz_reported_metrics(predicted_file_path):
             # Extract with safety
             full_pde = _as_float(data.get("complex_pde"))
             full_plddt = _as_float(data.get("complex_plddt"))
-    except:
-        return 0,0
+    except Exception as exc:
+        logging.warning(
+            "Could not parse reported Boltz metrics from %s: %s",
+            predicted_file_path,
+            exc,
+        )
+        return 0, 0
 
     if math.isnan(full_pde):
         full_pde = 0

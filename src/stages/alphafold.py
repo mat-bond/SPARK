@@ -61,7 +61,7 @@ def append_poly_ala_stub(chain: gemmi.Chain, n_res: int, spacing: float = 3.8):
         for name in {"CA","N","C","O"}:
             ca = gemmi.Atom()
             ca.name = name
-            element = name if ca != "CA" else 'C'
+            element = "C" if name == "CA" else name
             ca.element = gemmi.Element(element)
             ca.occ = 1.0
             ca.b_iso = 20.0

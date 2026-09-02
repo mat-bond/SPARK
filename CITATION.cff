@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use SPARK in research, please cite this software."
+title: "SPARK"
+type: software
+authors:
+  - family-names: "BONDAREV"
+    given-names: "Matvey"
+repository-code: "https://github.com/mat-bond/SPARK"
+license: MIT

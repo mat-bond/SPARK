@@ -11,19 +11,26 @@ for structure prediction, and then aggregates metrics/plots (RMSD, pLDDT, PAE/PD
 
 ---
 
-## Repo contents (key scripts)
+## Repository structure
 
-- `pipeline.py` — master launcher (optionally submits **SLURM** array jobs and stages)   
-- `rfdiffusion_pipeline.py` — fixes RFdiffusion outputs, chain IDs, renumbering, etc.   
-- `proteinmpnn_pipeline.py` — builds JSONL (parsed/tied/fixed) and invokes ProteinMPNN helpers.   
-- `boltz_pipeline.py` — builds Boltz YAMLs per designed sequence and merges/filters chains.   
-- `alphafold_pipeline.py` — prepares AlphaFold template structures from designed/fixed residues.   
-- `analysis.py` — computes metrics (RMSD via PyMOL, pLDDT, PAE/PDE, plots).   
-- `plots_and_graphs.py` — helper plotting (histograms/scatter/PAE heatmaps).   
-- `cavity_analysis.py` — cavity metrics using **pyKVFinder**.   
-- `utils.py`, `constants.py` — shared helpers (contig parsing, LUTs, paths, enums).    
-- `alphafold_script.py` — reads a **YAML** with `sequences:`,
-  feeds **colabdesign**/AlphaFold (`mk_af_model`) and writes a predicted PDB.
+SPARK/
+├── pipeline.py              # backwards-compatible command-line entry point
+├── src/
+│   ├── main.py              # pipeline orchestration and CLI
+│   ├── utils.py             # shared parsing, validation, environment and SLURM helpers
+│   ├── constants.py         # shared constants and analysis indices
+│   ├── plots_and_graphs.py  # plotting helpers
+│   ├── stages/
+│   │   ├── rfdiffusion.py
+│   │   ├── proteinmpnn.py
+│   │   ├── boltz.py
+│   │   ├── alphafold.py
+│   │   └── analysis.py
+│   ├── metrics/
+│   │   └── cavity.py
+│   └── workers/
+│       └── alphafold_script.py
+└── tests/                   # lightweight regression tests
 
 ---
 
